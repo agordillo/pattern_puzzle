@@ -3,13 +3,12 @@ import { useState, useRef, useEffect } from "react";
 import useSound from "../hooks/useSound";
 import { useContext } from "react";
 import { GlobalContext } from "./GlobalContext.jsx";
+import { THEMES } from "../constants/constants.jsx";
 
-const GRID_SIZE = 3;
-const DOT_RADIUS = 10;
 const HIT_AREA_RADIUS = 30;
 
 export default function MainScreen({ solvePuzzle, solved, solvedTrigger }) {
-  const { I18n } = useContext(GlobalContext);
+  const { I18n, appSettings: skin } = useContext(GlobalContext);
   const [pattern, setPattern] = useState([]);
   const [isDrawing, setIsDrawing] = useState(false);
   const [lines, setLines] = useState([]);
@@ -141,6 +140,7 @@ export default function MainScreen({ solvePuzzle, solved, solvedTrigger }) {
   return (
     <div className="mainScreen">
       <div
+        style={{ backgroundImage: skin.skin === THEMES.PHONE ? `url(${skin.phoneImg})` : "none" }}
         className={`pattern-container ${isError ? 'error' : ''}`}
         ref={containerRef}
         onMouseDown={handleStart}
@@ -150,7 +150,7 @@ export default function MainScreen({ solvePuzzle, solved, solvedTrigger }) {
         onTouchMove={handleMove}
         onTouchEnd={handleEnd}
       >
-        <div className="dots-grid">
+        {((skin.skin !== THEMES.PHONE) || (skin.skin === THEMES.PHONE && !solved)) && <><div className="dots-grid">
           {[...Array(9)].map((_, i) => (
             <div
               key={i}
@@ -162,33 +162,33 @@ export default function MainScreen({ solvePuzzle, solved, solvedTrigger }) {
           ))}
         </div>
 
-        <svg className="pattern-lines">
-          {lines.map((line, i) => (
-            <line
-              key={i}
-              x1={line.start.x}
-              y1={line.start.y}
-              x2={line.end.x}
-              y2={line.end.y}
-              className="line"
-            />
-          ))}
-          {isDrawing && pattern.length > 0 && (() => {
-            const start = getDotCenter(pattern[pattern.length - 1]);
-            if (!start) return null;
-            return (
+          <svg className="pattern-lines">
+            {lines.map((line, i) => (
               <line
-                x1={start.x}
-                y1={start.y}
-                x2={currentPos.x}
-                y2={currentPos.y}
-                className="line active-drag"
+                key={i}
+                x1={line.start.x}
+                y1={line.start.y}
+                x2={line.end.x}
+                y2={line.end.y}
+                className="line"
               />
-            );
-          })()}
-        </svg>
+            ))}
+            {isDrawing && pattern.length > 0 && (() => {
+              const start = getDotCenter(pattern[pattern.length - 1]);
+              if (!start) return null;
+              return (
+                <line
+                  x1={start.x}
+                  y1={start.y}
+                  x2={currentPos.x}
+                  y2={currentPos.y}
+                  className="line active-drag"
+                />
+              );
+            })()}
+          </svg></>}
+        {solved && <div className="success-message">{I18n.getTrans("i.unlocked")}</div>}
       </div>
-      {solved && <div className="success-message">{I18n.getTrans("i.unlocked")}</div>}
     </div>
   );
 }

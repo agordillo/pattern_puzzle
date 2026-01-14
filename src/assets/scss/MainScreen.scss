@@ -12,6 +12,10 @@ div.mainScreen {
     width: 500px;
     height: 500px;
     touch-action: none;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 
     .dots-grid {
       display: grid;
@@ -64,11 +68,16 @@ div.mainScreen {
         }
       }
     }
+
   }
+
+
 
   .success-message {
     position: absolute;
-    bottom: 50px;
+    bottom: -50px;
+    display: flex;
+    align-items: center;
     font-size: 1.5rem;
     color: #9aca3c;
     font-family: sans-serif;
@@ -100,6 +109,31 @@ div.mainScreen {
 
     .pattern-lines .line {
       stroke: #ff4444;
+    }
+  }
+}
+
+#global_wrapper.phone {
+  .pattern-container {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 90%;
+    width: auto;
+    margin: auto;
+    aspect-ratio: 9/19;
+
+    .dots-grid {
+      width: 85%;
+      height: 80%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .success-message {
+      bottom: auto;
     }
   }
 }
