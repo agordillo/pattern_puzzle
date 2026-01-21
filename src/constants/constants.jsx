@@ -22,6 +22,7 @@ export const THEME_ASSETS = {
   },
   [THEMES.PHONE]: {
     phoneImg: "images/phone.png",
+    backgroundImg: "images/background_phone.png",
   },
 };
 
